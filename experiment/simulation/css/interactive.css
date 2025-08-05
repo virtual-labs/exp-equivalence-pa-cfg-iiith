@@ -1,0 +1,854 @@
+/* Interactive Styles for PDA-CFG Equivalence Experiment 
+ * 
+ * Enhanced Features (Updated with exp7 theme):
+ * - Shadow highlights for current PDA states with pulsing animation
+ * - Drop-shadow effects for start and accept states
+ * - Enhanced visual feedback for active transitions
+ * - Smooth transitions and animations with reduced motion support
+ * - Browser compatibility fallbacks for older browsers
+ * - Color scheme updated to match exp7 theme
+ */
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.pulse {
+  animation: pulse 1s infinite;
+}
+
+.bounce {
+  animation: bounce 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes currentStatePulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.6)) drop-shadow(0 0 20px rgba(124, 58, 237, 0.4));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(124, 58, 237, 0.8)) drop-shadow(0 0 30px rgba(124, 58, 237, 0.6));
+    transform: scale(1.05);
+  }
+}
+
+@keyframes transitionPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6));
+    stroke-width: 4;
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.8));
+    stroke-width: 5;
+  }
+}
+
+/* Button interaction animations */
+@keyframes correctAnswer {
+  0% {
+    background: rgba(140, 90, 255, 0.18);
+    color: #5b21b6;
+    transform: scale(1);
+    box-shadow: 0 2px 8px 0 rgba(124, 58, 237, 0.04);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+    background: rgba(16, 185, 129, 0.7);
+  }
+  100% {
+    background: rgba(16, 185, 129, 0.9);
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
+}
+
+@keyframes incorrectAnswer {
+  0% {
+    background: rgba(140, 90, 255, 0.18);
+    color: #5b21b6;
+    transform: translateX(0) scale(1);
+  }
+  25% {
+    transform: translateX(-10px) scale(1.05);
+    background: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  }
+  75% {
+    transform: translateX(10px) scale(1.05);
+    background: rgba(239, 68, 68, 0.7);
+  }
+  100% {
+    background: rgba(239, 68, 68, 0.9);
+    color: #ffffff;
+    transform: translateX(0) scale(1.05);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  }
+}
+
+@keyframes buttonSelect {
+  0% {
+    background: #fff;
+    color: #374151;
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    background: #3B82F6;
+    color: #fff;
+    transform: scale(1.02);
+  }
+}
+
+/* PDA Visualization Specific Styles */
+.pda-state {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pda-state circle {
+  stroke-width: 2;
+  stroke: #4b5563;
+  fill: #f9fafb;
+  transition: all 0.5s ease;
+}
+
+.pda-state circle.start {
+  stroke: #7c3aed;
+  stroke-width: 3;
+  fill: #faf5ff;
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.3));
+}
+
+.pda-state circle.accept {
+  stroke: #10b981;
+  stroke-width: 3;
+  fill: #f0fdf4;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3));
+}
+
+.pda-state circle.current {
+  fill: #7c3aed;
+  stroke: #5b21b6;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.6)) drop-shadow(0 0 20px rgba(124, 58, 237, 0.4));
+  animation: currentStatePulse 2s infinite ease-in-out;
+}
+
+/* SVG-specific selectors for D3.js generated elements with higher specificity */
+svg .pda-state circle.state-circle.start {
+  stroke: #7c3aed !important;
+  stroke-width: 3 !important;
+  fill: #faf5ff !important;
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.3)) !important;
+}
+
+svg .pda-state circle.state-circle.accept {
+  stroke: #10b981 !important;
+  stroke-width: 3 !important;
+  fill: #f0fdf4 !important;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3)) !important;
+}
+
+svg .pda-state circle.state-circle.current {
+  fill: #7c3aed !important;
+  stroke: #5b21b6 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.6)) drop-shadow(0 0 20px rgba(124, 58, 237, 0.4)) !important;
+  animation: currentStatePulse 2s infinite ease-in-out !important;
+}
+
+/* Alternative approach - target any circle with these classes */
+circle.state-circle.start {
+  stroke: #7c3aed !important;
+  stroke-width: 3 !important;
+  fill: #faf5ff !important;
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.3)) !important;
+}
+
+circle.state-circle.accept {
+  stroke: #10b981 !important;
+  stroke-width: 3 !important;
+  fill: #f0fdf4 !important;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3)) !important;
+}
+
+circle.state-circle.current {
+  fill: #7c3aed !important;
+  stroke: #5b21b6 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.6)) drop-shadow(0 0 20px rgba(124, 58, 237, 0.4)) !important;
+  animation: currentStatePulse 2s infinite ease-in-out !important;
+}
+
+.pda-state.current text {
+  fill: white;
+  font-weight: bold;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Enhanced hover effects for states */
+.pda-state:hover circle:not(.current) {
+  filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.2));
+  transform: scale(1.02);
+}
+
+/* Enhanced current state when it's also start or accept */
+.pda-state.current.start circle,
+.pda-state.current.accept circle {
+  filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.6)) 
+          drop-shadow(0 0 20px rgba(124, 58, 237, 0.4))
+          drop-shadow(0 0 25px rgba(124, 58, 237, 0.2));
+}
+
+/* Accept state inner circle styling */
+.accept-inner-circle {
+  transition: all 0.5s ease;
+}
+
+.accept-inner-circle.current {
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.4));
+}
+
+.pda-state text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: #374151;
+}
+
+.pda-transition {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pda-transition path, .pda-transition line {
+  stroke: #6b7280;
+  stroke-width: 2;
+  fill: none;
+  marker-end: url(#arrowhead);
+}
+
+.pda-transition.active path, .pda-transition.active line {
+  stroke: #7c3aed;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6));
+  animation: transitionPulse 1.5s infinite ease-in-out;
+}
+
+/* Enhanced transition hover effects */
+.pda-transition:hover path:not(.active),
+.pda-transition:hover line:not(.active) {
+  stroke: #9333ea;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.3));
+  opacity: 0.9;
+}
+
+.pda-transition:hover text:not(.active) {
+  fill: #9333ea;
+  font-weight: 600;
+}
+
+.pda-transition text {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  fill: #374151;
+  text-anchor: middle;
+  transition: all 0.3s ease;
+}
+
+.pda-transition.active text {
+  fill: #7c3aed;
+  font-weight: bold;
+  filter: drop-shadow(0 1px 2px rgba(124, 58, 237, 0.4));
+}
+
+/* Stack visualization */
+.stack-visualization {
+  margin-top: 20px;
+}
+
+.stack-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stack-item {
+  width: 60px;
+  height: 30px;
+  background: #f3f4f6;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.3s ease;
+}
+
+.stack-item.top {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: #6366F1;
+  color: #3B82F6;
+  filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.2));
+}
+
+.stack-item.new {
+  animation: slideIn 0.5s ease-out;
+  background: #dcfce7;
+  border-color: #10b981;
+  filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.2));
+}
+
+.stack-item.removing {
+  animation: fadeOut 0.3s ease-in;
+}
+
+/* PDA Legend enhancements */
+.pda-legend .legend-item circle {
+  transition: all 0.3s ease;
+}
+
+.pda-legend .legend-item:hover circle {
+  filter: drop-shadow(0 2px 4px rgba(124, 58, 237, 0.3));
+  transform: scale(1.1);
+}
+
+/* CFG Derivation Tree Styles */
+.cfg-node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cfg-node circle {
+  fill: #f9fafb;
+  stroke: #6b7280;
+  stroke-width: 2;
+}
+
+.cfg-node.non-terminal circle {
+  fill: #ddd6fe;
+  stroke: #7c3aed;
+}
+
+.cfg-node.terminal circle {
+  fill: #dcfce7;
+  stroke: #10b981;
+}
+
+.cfg-node.current circle {
+  fill: #7c3aed;
+  stroke: #5b21b6;
+  stroke-width: 3;
+  animation: pulse 1s infinite;
+}
+
+.cfg-node text {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: #374151;
+}
+
+.cfg-node.current text {
+  fill: white;
+}
+
+.cfg-edge {
+  stroke: #6b7280;
+  stroke-width: 2;
+  fill: none;
+}
+
+.cfg-edge.new {
+  stroke: #6366F1;
+  stroke-width: 3;
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Production rule highlighting */
+.production-rule.highlighted {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: #6366F1;
+  color: #3B82F6;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+.production-rule.applied {
+  background: #dcfce7;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+/* Choice interaction styles - Matching exp7 rule styling exactly */
+.choice-button {
+  position: relative;
+  padding: 8px 12px !important;
+  background: rgba(140, 90, 255, 0.18) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-family: monospace !important;
+  font-size: 1.1rem !important;
+  color: #5b21b6 !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 8px 0 rgba(124, 58, 237, 0.04) !important;
+  transition: all 0.2s !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  margin: 0 !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+}
+
+.choice-button:hover {
+  background: rgba(140, 90, 255, 0.25) !important;
+  box-shadow: 0 3px 6px rgba(124, 58, 237, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+.choice-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: none;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.choice-button:hover::before {
+  transform: translateX(-100%);
+}
+
+.choice-button.correct {
+  background: rgba(16, 185, 129, 0.9) !important;
+  color: #ffffff !important;
+  border: 2px solid #10B981 !important;
+  transform: translateY(-1px) scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+  animation: correctAnswer 0.6s ease-out !important;
+}
+
+.choice-button.incorrect {
+  background: rgba(239, 68, 68, 0.9) !important;
+  color: #ffffff !important;
+  border: 2px solid #EF4444 !important;
+  transform: translateY(-1px) scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
+  animation: incorrectAnswer 0.6s ease-out !important;
+}
+
+.choice-button.selected {
+  background: rgba(140, 90, 255, 0.35) !important;
+  color: #5b21b6 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.15) !important;
+  animation: buttonSelect 0.3s ease-out !important;
+}
+
+/* Progress indicators */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3B82F6, #6366F1);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Step navigation styles */
+.step-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.step-counter {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.step-counter .current {
+  color: #7c3aed;
+  font-weight: bold;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: absolute;
+  background: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1f2937 transparent transparent transparent;
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Success/Error states */
+.success-state {
+  background: #f0fdf4;
+  border-color: #10b981;
+  animation: bounce 0.5s ease-out;
+}
+
+.error-state {
+  background: #fef2f2;
+  border-color: #ef4444;
+  animation: shake 0.5s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Focus states for accessibility */
+.choice-button:focus,
+.button:focus {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pda-state circle,
+  .cfg-node circle {
+    stroke-width: 3;
+  }
+  
+  .choice-button {
+    border-width: 3px;
+  }
+  
+  .feedback-area {
+    border-left-width: 6px;
+  }
+}
+
+/* PDA Visualization Layout */
+.visualization-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  min-height: 300px;
+}
+
+.pda-diagram-area {
+  flex: 1;
+  min-height: 300px;
+}
+
+.pda-stack-area {
+  flex: 0 0 150px; /* Fixed width for stack area */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stack-header {
+  font-size: 14px;
+  font-weight: bold;
+  color: #374151;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 5px 10px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+/* Visual Stack Styles */
+.visual-stack {
+  display: flex;
+  flex-direction: column-reverse; /* Stack grows upward */
+  align-items: center;
+  min-height: 200px;
+  width: 120px;
+  padding: 15px 10px;
+  border: 3px solid #e5e7eb;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #f9fafb 0%, #f3f4f6 100%);
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.visual-stack::after {
+  content: "BOTTOM";
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #6b7280;
+  font-weight: bold;
+}
+
+.visual-stack::before {
+  content: "TOP";
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #6b7280;
+  font-weight: bold;
+}
+
+.stack-element {
+  background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%);
+  color: white;
+  padding: 8px 12px;
+  margin: 3px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  min-width: 50px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  border: 2px solid #4c1d95;
+  animation: stackPush 0.4s ease-out;
+  position: relative;
+}
+
+.stack-element.top {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border-color: #991b1b;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  animation: stackTopHighlight 0.5s ease-out;
+}
+
+.stack-element.top::after {
+  content: "← TOP";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  font-size: 10px;
+  color: #dc2626;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.stack-element.empty-indicator {
+  background: transparent;
+  color: #9ca3af;
+  border: 2px dashed #d1d5db;
+  font-style: italic;
+  animation: none;
+  transform: none;
+  box-shadow: none;
+}
+
+@keyframes stackPush {
+  0% {
+    transform: translateY(30px) scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes stackTopHighlight {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  }
+}
+
+@keyframes stackPop {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-30px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Disable shadow effects for reduced motion */
+  .pda-state.current circle,
+  .pda-state.start circle,
+  .pda-state.accept circle,
+  .accept-inner-circle.current,
+  .pda-transition.active path,
+  .pda-transition.active line {
+    filter: none !important;
+  }
+}
+
+/* Browser compatibility fallbacks */
+@supports not (filter: drop-shadow(0 0 4px rgba(0,0,0,0.5))) {
+  /* Fallback for browsers that don't support drop-shadow */
+  .pda-state.current circle {
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.6);
+  }
+  
+  .pda-state.start circle,
+  .pda-state.accept circle {
+    box-shadow: 0 0 8px rgba(124, 58, 237, 0.3);
+  }
+}

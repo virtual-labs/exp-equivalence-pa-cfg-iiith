@@ -2,38 +2,157 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "After completing the PDA-CFG equivalence simulation, what is the most important insight about these two models?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "PDAs are always more efficient than CFGs",
+        "b": "Both models recognize identical languages through different computational approaches",
+        "c": "CFGs are easier to implement than PDAs",
+        "d": "The models are only equivalent for simple languages"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. Efficiency depends on implementation and specific use cases, not the theoretical model.",
+        "b": "Correct. The key insight is that PDAs and CFGs are two different computational paradigms (operational vs. generative) that have identical expressive power for context-free languages.",
+        "c": "Incorrect. Implementation ease varies with context and is not the primary theoretical insight.",
+        "d": "Incorrect. The equivalence holds for all context-free languages, not just simple ones."
       },
-      "correctAnswer": "a",
+      "correctAnswer": "b",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "How does observing parallel execution in both models reinforce understanding of equivalence?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "It shows that one model is faster than the other",
+        "b": "It demonstrates that both models make identical decisions at each step",
+        "c": "It reveals how different computational mechanisms can achieve the same language recognition",
+        "d": "It proves that the models use the same algorithm"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. Parallel execution demonstrates equivalence, not relative speed.",
+        "b": "Incorrect. The models make different types of decisions (transitions vs. productions) but achieve equivalent results.",
+        "c": "Correct. Watching both models process the same string through different mechanisms (stack operations vs. rule applications) illustrates how equivalent computational power can be achieved through distinct approaches.",
+        "d": "Incorrect. The models use different algorithms but achieve equivalent results."
       },
       "correctAnswer": "c",
       "difficulty": "beginner"
+    },
+    {
+      "question": "What does the step-by-step correspondence between PDA transitions and CFG productions demonstrate?",
+      "answers": {
+        "a": "That the models execute in exactly the same way",
+        "b": "That there's a systematic relationship between operational and generative approaches",
+        "c": "That one model is derived from the other",
+        "d": "That both models have the same time complexity"
+      },
+      "explanations": {
+        "a": "Incorrect. The models execute differently but achieve equivalent results.",
+        "b": "Correct. The correspondence shows there's a systematic, theoretical relationship between how PDAs operate (transitions/stack) and how CFGs generate (productions/derivations).",
+        "c": "Incorrect. Both models are independent theoretical constructs, though they're provably equivalent.",
+        "d": "Incorrect. Correspondence doesn't imply identical time complexity."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "How does the stack depth in PDA execution relate to CFG derivation complexity?",
+      "answers": {
+        "a": "Stack depth is unrelated to CFG properties",
+        "b": "Deeper stacks indicate more complex derivation trees",
+        "c": "Stack depth corresponds to the number of production rules used",
+        "d": "CFG complexity is independent of PDA stack behavior"
+      },
+      "explanations": {
+        "a": "Incorrect. There's a direct relationship between stack behavior and derivation structure.",
+        "b": "Correct. The maximum stack depth during PDA execution corresponds to the height of the derivation tree in the equivalent CFG, both reflecting the nesting complexity of the language structure.",
+        "c": "Incorrect. Stack depth relates to nesting level, not the total number of rules.",
+        "d": "Incorrect. The equivalence creates direct relationships between PDA and CFG behaviors."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "When a PDA makes an epsilon transition, what does this correspond to in the CFG model?",
+      "answers": {
+        "a": "Applying a production rule with a terminal on the right side",
+        "b": "Skipping a derivation step",
+        "c": "Applying an ε-production or completing a derivation branch",
+        "d": "Starting a new derivation sequence"
+      },
+      "explanations": {
+        "a": "Incorrect. Terminal productions correspond to input symbol consumption, not epsilon transitions.",
+        "b": "Incorrect. Epsilon transitions are meaningful computational steps, not skipped steps.",
+        "c": "Correct. PDA epsilon transitions (state changes without input) correspond to CFG ε-productions (deriving empty string) or completing derivation branches without consuming input symbols.",
+        "d": "Incorrect. Starting new sequences doesn't typically involve epsilon transitions."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What advantage does understanding PDA-CFG equivalence provide for parsing algorithm design?",
+      "answers": {
+        "a": "It eliminates the need for different parsing strategies",
+        "b": "It allows choosing between operational and generative approaches based on requirements",
+        "c": "It guarantees that all parsing can be done in linear time",
+        "d": "It proves that regular expressions are sufficient for all parsing"
+      },
+      "explanations": {
+        "a": "Incorrect. Different strategies are still needed for different contexts and requirements.",
+        "b": "Correct. Understanding equivalence allows designers to choose between PDA-based approaches (like recursive descent parsing) and CFG-based approaches (like table-driven parsing) depending on implementation constraints and requirements.",
+        "c": "Incorrect. Context-free parsing generally requires more than linear time.",
+        "d": "Incorrect. Regular expressions handle regular languages, not context-free languages."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "How does experiencing both models help understand the concept of computational equivalence?",
+      "answers": {
+        "a": "By showing that only one model is actually needed",
+        "b": "By demonstrating that equivalent power can be achieved through different computational paradigms",
+        "c": "By proving that all computational models are equivalent",
+        "d": "By showing that simulation is the only way to prove equivalence"
+      },
+      "explanations": {
+        "a": "Incorrect. Both models remain useful for different purposes despite equivalence.",
+        "b": "Correct. Hands-on experience with both models illustrates the fundamental computer science concept that equivalent computational power can be achieved through radically different approaches (operational vs. generative).",
+        "c": "Incorrect. Only specific pairs of models are equivalent; not all computational models have the same power.",
+        "d": "Incorrect. Mathematical proofs establish equivalence; simulation demonstrates it concretely."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What does the ability to switch between PDA and CFG views during execution demonstrate about language theory?",
+      "answers": {
+        "a": "That one model is more fundamental than the other",
+        "b": "That languages have multiple valid computational representations",
+        "c": "That conversion between models is always possible",
+        "d": "That all formal languages can be expressed in multiple ways"
+      },
+      "explanations": {
+        "a": "Incorrect. Neither model is more fundamental; they're equivalent for context-free languages.",
+        "b": "Correct. The ability to seamlessly switch between views demonstrates that the same formal language can be validly represented and computed using different theoretical frameworks, highlighting the richness of formal language theory.",
+        "c": "Incorrect. Conversion is only possible between equivalent models, not all models.",
+        "d": "Incorrect. The equivalence applies specifically to context-free languages, not all formal languages."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "How does this experiment's validation system reinforce learning about formal verification?",
+      "answers": {
+        "a": "By showing that only one correct answer exists for each step",
+        "b": "By demonstrating how theoretical correctness can be computationally verified",
+        "c": "By proving that formal systems are always deterministic",
+        "d": "By eliminating the need for mathematical proofs"
+      },
+      "explanations": {
+        "a": "Incorrect. While each step has a correct answer, the focus is on verification principles, not uniqueness.",
+        "b": "Correct. The step-by-step validation demonstrates how theoretical properties (correct PDA transitions, valid CFG derivations) can be automatically verified, illustrating principles of formal verification used in computer science.",
+        "c": "Incorrect. Many formal systems, including PDAs, can be non-deterministic.",
+        "d": "Incorrect. Mathematical proofs remain essential; computational verification supplements but doesn't replace them."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
     }
   ]
 }

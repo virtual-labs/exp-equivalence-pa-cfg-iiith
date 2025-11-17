@@ -2,38 +2,157 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "What is the primary significance of PDA-CFG equivalence in formal language theory?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "PDAs are faster than CFGs for string recognition",
+        "b": "Both models recognize exactly the same class of languages (context-free languages)",
+        "c": "CFGs are more powerful than PDAs",
+        "d": "PDAs can only recognize regular languages"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. The equivalence is about expressive power, not computational efficiency.",
+        "b": "Correct. The fundamental theorem states that PDAs and CFGs are equivalent in computational power, both recognizing precisely the context-free languages.",
+        "c": "Incorrect. Neither model is more powerful than the other; they are equivalent.",
+        "d": "Incorrect. PDAs recognize context-free languages, which include but extend beyond regular languages."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In a PDA, what is the role of the stack?",
+      "answers": {
+        "a": "To store the input string",
+        "b": "To provide unlimited memory for computation",
+        "c": "To maintain context information during computation",
+        "d": "To replace the need for states"
+      },
+      "explanations": {
+        "a": "Incorrect. The input string is read from the input tape, not stored in the stack.",
+        "b": "Incorrect. The stack provides bounded memory (last-in-first-out), not unlimited memory.",
+        "c": "Correct. The stack maintains context information, allowing the PDA to remember previous computations and handle nested structures typical of context-free languages.",
+        "d": "Incorrect. The stack complements states; PDAs have both states and stack memory."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does a CFG production rule A → α represent?",
+      "answers": {
+        "a": "A can be replaced by α during derivation",
+        "b": "A must appear before α in the final string",
+        "c": "A and α are equivalent symbols",
+        "d": "A transforms into α through computation"
+      },
+      "explanations": {
+        "a": "Correct. A production rule A → α means the non-terminal A can be replaced by the string α during the derivation process.",
+        "b": "Incorrect. Production rules don't specify ordering in the final string.",
+        "c": "Incorrect. A is a non-terminal and α is a string that may contain both terminals and non-terminals.",
+        "d": "Incorrect. It's replacement during derivation, not transformation through computation."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "How does a PDA recognize the language L = {aⁿbⁿ | n ≥ 0}?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "By counting a's and b's using states",
+        "b": "By pushing a's onto the stack and popping them for b's",
+        "c": "By storing the entire string and comparing halves",
+        "d": "By using regular expression matching"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. States alone cannot count unbounded numbers; stack memory is required.",
+        "b": "Correct. The PDA pushes symbols onto the stack for each 'a' and pops them for each 'b', ensuring equal counts.",
+        "c": "Incorrect. PDAs process input sequentially and don't store entire strings.",
+        "d": "Incorrect. This language is context-free, not regular, so regular expressions cannot express it."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What corresponds to a PDA's epsilon transition in CFG terms?",
+      "answers": {
+        "a": "A production rule with empty right-hand side",
+        "b": "A terminal symbol in the grammar",
+        "c": "A non-terminal symbol",
+        "d": "The start symbol of the grammar"
+      },
+      "explanations": {
+        "a": "Correct. Epsilon transitions in PDAs (state changes without input consumption) correspond to ε-productions in CFGs (rules that derive the empty string).",
+        "b": "Incorrect. Terminal symbols correspond to input symbol consumption in PDAs.",
+        "c": "Incorrect. Non-terminals correspond to stack symbols or state information.",
+        "d": "Incorrect. The start symbol corresponds to the initial PDA configuration."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In PDA-CFG equivalence, what does the derivation tree height correspond to?",
+      "answers": {
+        "a": "The number of input symbols",
+        "b": "The number of production rules",
+        "c": "The maximum stack depth during PDA computation",
+        "d": "The number of accepting states"
+      },
+      "explanations": {
+        "a": "Incorrect. Tree height is independent of input length.",
+        "b": "Incorrect. Tree height doesn't directly relate to the total number of rules.",
+        "c": "Correct. The height of the derivation tree corresponds to the maximum stack depth reached during PDA computation, reflecting the nesting level of the language structure.",
+        "d": "Incorrect. The number of accepting states is a structural property, not related to computation depth."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Why can't deterministic PDAs recognize all context-free languages?",
+      "answers": {
+        "a": "They lack sufficient memory",
+        "b": "They cannot handle ambiguous grammars",
+        "c": "They process input too slowly",
+        "d": "Some context-free languages require non-deterministic choice points"
+      },
+      "explanations": {
+        "a": "Incorrect. Deterministic PDAs have the same stack memory capabilities as non-deterministic ones.",
+        "b": "Incorrect. Grammar ambiguity is a separate concept from PDA determinism.",
+        "c": "Incorrect. This is about computational capability, not speed.",
+        "d": "Correct. Some context-free languages inherently require non-deterministic decisions that cannot be resolved deterministically, making DPDAs strictly less powerful than general PDAs."
+      },
+      "correctAnswer": "d",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "In the conversion from CFG to PDA, how are production rules handled?",
+      "answers": {
+        "a": "Each rule becomes a single transition",
+        "b": "Rules are stored in PDA states",
+        "c": "Right-hand sides are pushed onto the stack when left-hand sides are popped",
+        "d": "Rules are ignored in the conversion"
+      },
+      "explanations": {
+        "a": "Incorrect. The relationship is more complex than one-to-one mapping.",
+        "b": "Incorrect. Rules are not stored in states but implemented through transitions.",
+        "c": "Correct. In the standard conversion, when a non-terminal is popped from the stack, the right-hand side of its production rule is pushed back, simulating the derivation process.",
+        "d": "Incorrect. Production rules are central to the conversion process."
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What computational complexity advantage does the PDA-CFG equivalence provide?",
+      "answers": {
+        "a": "It allows choosing the most efficient model for each specific language",
+        "b": "It proves that context-free languages can be recognized in linear time",
+        "c": "It eliminates the need for parsing algorithms",
+        "d": "It reduces space complexity to constant memory"
+      },
+      "explanations": {
+        "a": "Correct. The equivalence allows language designers and implementers to choose between operational (PDA) and generative (CFG) approaches based on the specific requirements and constraints of their application.",
+        "b": "Incorrect. Context-free recognition generally requires more than linear time.",
+        "c": "Incorrect. Parsing algorithms are implementations of the theoretical equivalence.",
+        "d": "Incorrect. Context-free languages inherently require more than constant memory."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
     }
   ]
 }

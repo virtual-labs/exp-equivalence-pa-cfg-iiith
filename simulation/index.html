@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Equivalence of Pushdown Automata and Context-Free Grammars</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/interactive.css">
+  <script src="mobile_detection.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Quick Guide Section -->
+    <div class="guide-container">
+      <div class="guide-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 8v4M12 16h.01"></path>
+        </svg>
+        <h2>Quick Guide</h2>
+      </div>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="step-number blue">1</div>
+          <div class="step-text">Select a language example to explore PDA-CFG equivalence</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number green">2</div>
+          <div class="step-text">Manually execute PDA transitions and CFG derivations step-by-step</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number purple">3</div>
+          <div class="step-text">Observe how both approaches recognize the same string</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number red">4</div>
+          <div class="step-text">Validate each step with hints and corrections</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div class="main-content">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button id="pda_tab" class="tab-button active" data-tab="pda">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          Pushdown Automaton (PDA)
+        </button>
+        <button id="cfg_tab" class="tab-button" data-tab="cfg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16,18 22,12 16,6"></polyline>
+            <polyline points="8,6 2,12 8,18"></polyline>
+          </svg>
+          Context-Free Grammar (CFG)
+        </button>
+      </div>
+
+      <!-- Controls (horizontal at the top) -->
+      <div class="controls-container">
+        <div class="controls-title">Controls:</div>
+        <div class="horizontal-controls">
+          <button id="change_language" class="button purple">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+            </svg>
+            Change Language
+          </button>
+          <button id="previous_step" class="button orange">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Previous Step
+          </button>
+          <button id="show_hint" class="button blue">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4M12 16h.01"></path>
+            </svg>
+            Show Hint
+          </button>
+          <button id="auto_step" class="button yellow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4"></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+            Apply Correct
+          </button>
+          <button id="reset_simulation" class="button green">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Language Status (Shared) -->
+      <div class="shared-input-container">
+        <div class="input-string-label">Current Language:</div>
+        <div id="language_container_shared">
+          <div class="language-info">
+            <span id="language_name">Loading...</span>
+          </div>
+        </div>
+        <div class="input-string-label">Test String:</div>
+        <div id="string_container_shared">
+          <div class="input-string">
+            <span id="test_string">Loading...</span>
+          </div>
+        </div>
+        <div class="input-string-label">Remaining Input:</div>
+        <div id="remaining_input_container">
+          <div class="input-string">
+            <span id="remaining_input_display">""</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content Areas -->
+      <div class="tab-content-container">
+        <!-- PDA Tab Content -->
+        <div id="pda_content" class="tab-content active">
+          <div class="tab-main-area">
+            <!-- PDA Visualization and Info -->
+            <div class="simulation-section">
+              
+              <!-- PDA Visualization -->
+              <div id="pda_visualization" class="visualization-container">
+                <!-- D3.js PDA diagram will be rendered here -->
+                <div class="pda-diagram-area">
+                  <!-- SVG will be inserted here by D3 -->
+                </div>
+                <!-- Visual Stack positioned to the right -->
+                <div class="pda-stack-area">
+                  <div class="stack-header">Stack</div>
+                  <div id="visual_stack" class="visual-stack">
+                    <!-- Stack elements will be added dynamically -->
+                  </div>
+                </div>
+              </div>
+              
+              <!-- PDA Action Selection -->
+              <div class="action-selection-panel">
+                <div class="selection-header">
+                  <h3>Select PDA Transition</h3>
+                  <div class="mode-badge">PDA Mode</div>
+                </div>
+                
+                <div class="action-choices">
+                  <div class="choices-label">Available Actions:</div>
+                  <div id="pda_action_choices_container" class="choices-container">
+                    <!-- PDA Action choices will be populated dynamically -->
+                  </div>
+                </div>
+                
+                <!-- PDA Feedback Area -->
+                <div id="pda_feedback_area" class="feedback-area">
+                  <div id="pda_feedback_message" class="feedback-message">
+                    Make your selection above to proceed with the simulation.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PDA Steps Sidebar -->
+            <div class="steps-sidebar">
+              <h4>PDA Execution Steps</h4>
+              <div id="pda_steps_list" class="steps-list">
+                <!-- Steps will be populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CFG Tab Content -->
+        <div id="cfg_content" class="tab-content">
+          <div class="tab-main-area">
+            <!-- CFG Visualization and Info -->
+            <div class="simulation-section">
+              
+              <!-- CFG Visualization -->
+              <div id="cfg_visualization" class="visualization-container">
+                <!-- D3.js CFG derivation tree will be rendered here -->
+              </div>
+              
+              <!-- CFG Production Rules -->
+              <div class="production-rules-display">
+                <h4>Grammar Rules</h4>
+                <div id="cfg_production_rules" class="rules-container">
+                  <!-- Production rules will be populated dynamically -->
+                </div>
+              </div>
+              
+              <!-- CFG Action Selection -->
+              <div class="action-selection-panel">
+                <div class="selection-header">
+                  <h3>Select CFG Production</h3>
+                  <div class="mode-badge">CFG Mode</div>
+                </div>
+                
+                <div class="action-choices">
+                  <div class="choices-label">Available Actions:</div>
+                  <div id="cfg_action_choices_container" class="choices-container">
+                    <!-- CFG Action choices will be populated dynamically -->
+                  </div>
+                </div>
+                
+                <!-- CFG Feedback Area -->
+                <div id="cfg_feedback_area" class="feedback-area">
+                  <div id="cfg_feedback_message" class="feedback-message">
+                    Make your selection above to proceed with the simulation.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CFG Steps Sidebar -->
+            <div class="steps-sidebar">
+              <h4>CFG Derivation Steps</h4>
+              <div id="cfg_steps_list" class="steps-list">
+                <!-- Derivation steps will be populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/helper.js"></script>
+  <script src="js/pda-visualizer.js"></script>
+  <script src="js/cfg-visualizer.js"></script>
+  <script src="js/interactive.js"></script>
+  <script src="js/main.js"></script>
+<script src="../assets/js/iframeResize.js"></script>
+        
+        </body>
+</html>

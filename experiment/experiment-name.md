@@ -1,1 +1,1 @@
-## Equivalence of PA and CFG
+## Equivalence of PDA and CFG

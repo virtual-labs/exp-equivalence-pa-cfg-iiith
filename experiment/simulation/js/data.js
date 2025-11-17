@@ -670,6 +670,383 @@ const equivalenceData = {
                 }
             ]
         }
+        ,
+        // New example: Balanced parentheses (classic CFL)
+        {
+            id: 4,
+            name: "L = {w ∈ {(,)}* | parentheses balanced}",
+            description: "Language of well-balanced parentheses",
+            testString: "()()",
+            pda: {
+                states: [
+                    { id: "q0", x: 150, y: 150, isStart: true, isAccept: false, label: "q₀" },
+                    { id: "q1", x: 350, y: 150, isStart: false, isAccept: true, label: "q₁" }
+                ],
+                alphabet: ["(", ")"],
+                stackAlphabet: ["Z", "P"],
+                startState: "q0",
+                acceptStates: ["q1"],
+                transitions: [
+                    { from: "q0", to: "q0", input: "(", stackPop: "Z", stackPush: "PZ", label: "(, Z → PZ" },
+                    { from: "q0", to: "q0", input: "(", stackPop: "P", stackPush: "PP", label: "(, P → PP" },
+                    { from: "q0", to: "q0", input: ")", stackPop: "P", stackPush: "", label: "), P → ε" },
+                    { from: "q0", to: "q1", input: "ε", stackPop: "Z", stackPush: "Z", label: "ε, Z → Z" }
+                ]
+            },
+            cfg: {
+                startSymbol: "S",
+                nonTerminals: ["S"],
+                terminals: ["(", ")"],
+                productions: [
+                    { left: "S", right: "(S)S", id: "p1" },
+                    { left: "S", right: "ε", id: "p2" }
+                ]
+            },
+            pdaSteps: [
+                {
+                    stepNumber: 1,
+                    currentState: "q0",
+                    remainingInput: "()()",
+                    stack: ["Z"],
+                    description: "Initial configuration",
+                    choices: [
+                        "δ(q0, (, P) = {(q0, PP)}",
+                        "δ(q0, (, Z) = {(q0, PZ)}",
+                        "δ(q0, ε, Z) = {(q1, Z)}",
+                        "δ(q0, ), Z) = {(q0, Z)}"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Read '(' and push a P onto stack (P represents '(')",
+                    hint: "Push for every '('"
+                },
+                {
+                    stepNumber: 2,
+                    currentState: "q0",
+                    remainingInput: ")()",
+                    stack: ["Z", "P"],
+                    description: "After reading first '('",
+                    choices: [
+                        "δ(q0, (, P) = {(q0, PP)}",
+                        "δ(q0, ε, Z) = {(q1, Z)}",
+                        "δ(q0, ), P) = {(q0, ε)}",
+                        "δ(q0, (, Z) = {(q0, PZ)}"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Read ')', match and pop a P",
+                    hint: "Pop when you encounter a matching ')'."
+                },
+                {
+                    stepNumber: 3,
+                    currentState: "q0",
+                    remainingInput: "()",
+                    stack: ["Z"],
+                    description: "After completing first pair",
+                    choices: [
+                        "δ(q0, ), Z) = {(q0, Z)}",
+                        "δ(q0, ε, Z) = {(q1, Z)}",
+                        "δ(q0, (, Z) = {(q0, PZ)}",
+                        "δ(q0, ), P) = {(q0, ε)}"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Push for next '('",
+                    hint: "Continue processing the remaining input"
+                },
+                {
+                    stepNumber: 4,
+                    currentState: "q0",
+                    remainingInput: ")",
+                    stack: ["Z", "P"],
+                    description: "Prepare to pop second pair",
+                    choices: [
+                        "δ(q0, ), Z) = {(q0, Z)}",
+                        "δ(q0, (, P) = {(q0, PP)}",
+                        "δ(q0, ε, Z) = {(q1, Z)}",
+                        "δ(q0, ), P) = {(q0, ε)}"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Pop the P to match the last ')', leaving Z on stack",
+                    hint: "Finish matching the parentheses"
+                },
+                {
+                    stepNumber: 5,
+                    currentState: "q0",
+                    remainingInput: "",
+                    stack: ["Z"],
+                    description: "All input processed",
+                    choices: [
+                        "δ(q0, ε, Z) = {(q1, Z)}",
+                        "δ(q0, (, Z) = {(q0, PZ)}",
+                        "δ(q0, ), Z) = {(q0, Z)}",
+                        "δ(q0, ), P) = {(q0, ε)}"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Use epsilon transition on Z to accept",
+                    hint: "When input is empty and only Z is on stack, accept"
+                }
+            ],
+            cfgSteps: [
+                {
+                    stepNumber: 1,
+                    currentString: "S",
+                    targetString: "()()",
+                    description: "Start with start symbol",
+                    choices: [
+                        "S → ε",
+                        "S → (S)S"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Apply S → (S)S to start introducing parentheses",
+                    hint: "We need to generate pairs and possibly concatenate them"
+                },
+                {
+                    stepNumber: 2,
+                    currentString: "(S)S",
+                    targetString: "()()",
+                    description: "After first production",
+                    choices: [
+                        "S → (S)S",
+                        "S → ε"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Replace the S inside parentheses with ε to make '()'",
+                    hint: "Close the inner parentheses when possible"
+                },
+                {
+                    stepNumber: 3,
+                    currentString: "()S",
+                    targetString: "()()",
+                    description: "We have one unit, generate the next",
+                    choices: [
+                        "S → ε",
+                        "S → (S)S"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Apply S → (S)S to generate another '()'",
+                    hint: "Generate the second parentheses pair"
+                },
+                {
+                    stepNumber: 4,
+                    currentString: "()(S)S",
+                    targetString: "()()",
+                    description: "Finish derivation",
+                    choices: [
+                        "S → (S)S",
+                        "S → ε"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Use S → ε to end the derivation",
+                    hint: "Stop when target string is reached"
+                }
+            ]
+        }
+
+        ,
+        // New example: Union of two CFLs: a^n b^n c^m  ∪  a^m b^n c^n
+        {
+            id: 5,
+            name: "L = {a^n b^n c^m | n,m≥0} ∪ {a^m b^n c^n | m,n≥0}",
+            description: "Union of two context-free languages; nondeterministic PDA guesses which case",
+            testString: "aabbbccc",
+            pda: {
+                states: [
+                    { id: "q0", x: 120, y: 120, isStart: true, isAccept: false, label: "q₀" },
+                    { id: "q1", x: 300, y: 120, isStart: false, isAccept: false, label: "q₁" },
+                    { id: "q2", x: 480, y: 120, isStart: false, isAccept: false, label: "q₂" },
+                    { id: "q3", x: 660, y: 120, isStart: false, isAccept: true, label: "q₃" },
+                    { id: "q4", x: 300, y: 240, isStart: false, isAccept: false, label: "q₄" },
+                    { id: "q5", x: 480, y: 240, isStart: false, isAccept: false, label: "q₅" }
+                ],
+                alphabet: ["a", "b", "c"],
+                stackAlphabet: ["Z", "A"],
+                startState: "q0",
+                acceptStates: ["q3"],
+                transitions: [
+                    // Epsilon branch to choose case 1: a^n b^n c^m
+                    { from: "q0", to: "q1", input: "ε", stackPop: "Z", stackPush: "Z", label: "ε, Z → Z (choose case 1)" },
+                    { from: "q1", to: "q1", input: "a", stackPop: "Z", stackPush: "AZ", label: "a, Z → AZ" },
+                    { from: "q1", to: "q1", input: "a", stackPop: "A", stackPush: "AA", label: "a, A → AA" },
+                    { from: "q1", to: "q2", input: "b", stackPop: "A", stackPush: "", label: "b, A → ε" },
+                    { from: "q2", to: "q2", input: "b", stackPop: "A", stackPush: "", label: "b, A → ε" },
+                    { from: "q2", to: "q3", input: "ε", stackPop: "Z", stackPush: "Z", label: "ε, Z → Z" },
+                    { from: "q3", to: "q3", input: "c", stackPop: "Z", stackPush: "Z", label: "c, Z → Z" },
+                    // Epsilon branch to choose case 2: a^m b^n c^n
+                    { from: "q0", to: "q4", input: "ε", stackPop: "Z", stackPush: "Z", label: "ε, Z → Z (choose case 2)" },
+                    { from: "q4", to: "q4", input: "a", stackPop: "Z", stackPush: "Z", label: "a, Z → Z" },
+                    { from: "q4", to: "q5", input: "b", stackPop: "Z", stackPush: "AZ", label: "b, Z → AZ" },
+                    { from: "q5", to: "q5", input: "b", stackPop: "A", stackPush: "AA", label: "b, A → AA" },
+                    { from: "q5", to: "q5", input: "c", stackPop: "A", stackPush: "", label: "c, A → ε" },
+                    { from: "q5", to: "q3", input: "ε", stackPop: "Z", stackPush: "Z", label: "ε, Z → Z" }
+                ]
+            },
+            cfg: {
+                startSymbol: "S",
+                nonTerminals: ["S", "X", "Y", "Z"],
+                terminals: ["a", "b", "c"],
+                productions: [
+                    // union of two cases
+                    { left: "S", right: "X", id: "p1" },
+                    { left: "S", right: "Y", id: "p2" },
+
+                    // Case X (a^n b^n c^m): a balanced a/b part then c*
+                    { left: "X", right: "aXb", id: "p3" },
+                    { left: "X", right: "Z", id: "p4" },
+                    { left: "Z", right: "cZ", id: "p5" },
+                    { left: "Z", right: "ε", id: "p6" },
+
+                    // Case Y (a^m b^n c^n): arbitrary a* then balanced b/c
+                    { left: "Y", right: "aY", id: "p7" },
+                    { left: "Y", right: "W", id: "p8" },
+                    { left: "W", right: "bWc", id: "p9" },
+                    { left: "W", right: "ε", id: "p10" }
+                ]
+            },
+            pdaSteps: [
+                {
+                    stepNumber: 1,
+                    currentState: "q0",
+                    remainingInput: "aabbbccc",
+                    stack: ["Z"],
+                    description: "Initial configuration (nondeterministic choice)",
+                    choices: [
+                        "Read a and push (ambiguous)",
+                        "ε-branch to case2: q4",
+                        "ε-branch to case1: q1",
+                        "Reject immediately"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Choose case 1 or case 2 nondeterministically; here we show case 2 path",
+                    hint: "We need to decide which pattern to follow"
+                },
+                {
+                    stepNumber: 2,
+                    currentState: "q4",
+                    remainingInput: "abbbccc",
+                    stack: ["Z"],
+                    description: "Reading initial a's (case 2), a's are ignored on stack",
+                    choices: [
+                        "δ(q4, b, Z) -> (q5, AZ)",
+                        "δ(q4, a, Z) -> (q4, Z)",
+                        "δ(q4, ε, Z) -> (q4, Z)",
+                        "δ(q0, b, Z) -> (q1, Z)"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Consume an 'a' without changing the stack in case 2",
+                    hint: "In case 2 'a' is free and does not affect the b/c equality"
+                },
+                {
+                    stepNumber: 3,
+                    currentState: "q5",
+                    remainingInput: "bbbccc",
+                    stack: ["Z", "A"],
+                    description: "Start counting b's by pushing A for each b",
+                    choices: [
+                        "δ(q5, c, A) = {(q5, ε)}",
+                        "δ(q5, b, A) = {(q5, AA)}",
+                        "δ(q5, ε, Z) = {(q3, Z)}",
+                        "δ(q5, a, Z) = {(q4, Z)}"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Push A for another 'b'",
+                    hint: "Count the number of b's to match later with c's"
+                },
+                {
+                    stepNumber: 4,
+                    currentState: "q5",
+                    remainingInput: "ccc",
+                    stack: ["Z", "A", "A", "A"],
+                    description: "After pushing for all b's, switch to popping on c's",
+                    choices: [
+                        "δ(q5, b, A) = {(q5, AA)}",
+                        "δ(q5, c, A) = {(q5, ε)}",
+                        "δ(q5, ε, Z) = {(q3, Z)}",
+                        "δ(q4, b, Z) = {(q5, AZ)}"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Read c and pop an A for each c",
+                    hint: "Match each c with a corresponding b count"
+                },
+                {
+                    stepNumber: 5,
+                    currentState: "q5",
+                    remainingInput: "",
+                    stack: ["Z"],
+                    description: "After all b/c matched and stack reduced to Z",
+                    choices: [
+                        "δ(q5, ε, A) = {(q5, A)}",
+                        "δ(q1, ε, Z) = {(q2, Z)}",
+                        "δ(q2, c, Z) = {(q2, Z)}",
+                        "δ(q5, ε, Z) = {(q3, Z)}"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Use epsilon transition to accept; we matched b's and c's",
+                    hint: "Accept if stack is back to Z and no input left"
+                }
+            ],
+            cfgSteps: [
+                {
+                    stepNumber: 1,
+                    currentString: "S",
+                    targetString: "aabbbccc",
+                    description: "Start; choose union branch",
+                    choices: [
+                        "S → X (case a^n b^n c^m)",
+                        "S → Y (case a^m b^n c^n)"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Choose case Y to generate b^n c^n; we still must handle initial a's",
+                    hint: "We need to pick the grammar branch that produces equal b/c counts"
+                },
+                {
+                    stepNumber: 2,
+                    currentString: "Y",
+                    targetString: "aabbbccc",
+                    description: "Generate initial a* for Y",
+                    choices: [
+                        "Y → W",
+                        "Y → aY"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Consume one 'a' using Y → aY",
+                    hint: "Repeat to generate 'aa' at the start"
+                },
+                {
+                    stepNumber: 3,
+                    currentString: "aaW",
+                    targetString: "aabbbccc",
+                    description: "Now produce the b^n c^n part from W",
+                    choices: [
+                        "W → ε",
+                        "W → bWc"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Apply W → bWc to start matching b's and c's",
+                    hint: "Each application adds a pair 'b...c'"
+                },
+                {
+                    stepNumber: 4,
+                    currentString: "aabWcc",
+                    targetString: "aabbbccc",
+                    description: "Continue until counts match",
+                    choices: [
+                        "W → ε",
+                        "W → bWc"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Apply W → bWc twice more to produce 'bbb' and 'ccc'",
+                    hint: "Stop when you have 'bbb' and 'ccc'"
+                },
+                {
+                    stepNumber: 5,
+                    currentString: "aabbbccc",
+                    targetString: "aabbbccc",
+                    description: "Derivation complete",
+                    choices: [],
+                    correctAnswer: -1,
+                    explanation: "String generated correctly under union branch Y",
+                    hint: "Union of grammars allows this non-overlapping form"
+                }
+            ]
+        }
     ]
 };
 
